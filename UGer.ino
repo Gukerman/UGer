@@ -2,6 +2,8 @@
 
 
 */
+#include <Arduino.h>
+
 #include <ESP8266WiFi.h>        //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step1-wifi
 #include <ESP8266WebServer.h>   //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step2-webserver
 #include <ESP8266SSDP.h>        //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step3-ssdp
@@ -28,8 +30,8 @@ char* mqtt_user = "User";
 char* mqtt_pass = "Pass";
 String mqtt_client = "ESP8266";
 String mult = "";        // переменная хронения предыдущего сообщания (убирает дубли публикации, но это не точно)
-  
-// Объект для обнавления с web страницы 
+
+// Объект для обнавления с web страницы
 ESP8266HTTPUpdateServer httpUpdater;
 
 // Web интерфейс для устройства
@@ -50,12 +52,13 @@ String gerkonopen = "";       // код геркона отрыт 2866734
 String gerkonclose = "";       // код геркона закрыт 2866727
 String gerkonbat = "";       // код геркона батарейка  2866731
 String gerkonalarm = "";       // код геркона авария 2866731
+String gerkonend = "";       // последняя команда геркона
 
 
 String  mqttServer = "";   // 77.79.191.226
-String  mqttPort =  "";     // 
-String  mqttUser =  "";     // 
-String  mqttPass =  "";     // 
+String  mqttPort =  "";     //
+String  mqttUser =  "";     //
+String  mqttPass =  "";     //
 
 String pubTopic = "";       //smart_house/<номер_договора>/<код_устройства>/<статус_устройства>​ . Например: smart_house/72357995ASU/Door1/OPEN
 String cTopic = "";       // состояние геркона для публикации, например OPEN
@@ -66,27 +69,27 @@ boolean secTest = true;
 String command = "";
 
 String chipID = "";
-String jsonConfig = "{}";           // Здесь все статусы 
-//String configJson = "{}";            // разобраться одну упразнить 
+String jsonConfig = "{}";           // Здесь все статусы
+//String configJson = "{}";            // разобраться одну упразнить
 
 String configOptions = "{}";         // Здесь опции для всех страниц
 String configSetup = "{}";           // Здесь данные для setup
 
 
 int port = 80;
-int pin433 = 13; 
+int pin433 = 13;
 
-int pinrele = 5; 
-int pinled = 2; 
+int pinrele = 5;
+int pinled = 2;
 
 void setup() {
   pinMode (pinrele, OUTPUT);
   pinMode (pinled, OUTPUT);
 
-  digitalWrite(pinrele,LOW);
-  digitalWrite(pinled,LOW);
+  digitalWrite(pinrele, LOW);
+  digitalWrite(pinled, LOW);
 
-  HTTP = ESP8266WebServer (port);
+  HTTP = ESP8266WebServer(port);
   Serial.begin(115200);
   Serial.println("");
 
@@ -98,20 +101,20 @@ void setup() {
   FS_init();         // Включаем работу с файловой системой
 
   // ----------------- начинаем загрузку
-//  configSetup = readFile("config.save.json", 4096);
-/*  configSetup = jsonWrite(configSetup, "time", "00:00:00");
-  configJson = jsonWrite(configJson, "setIndex", jsonRead(configSetup, "setIndex"));
-  configOptions = jsonWrite(configOptions, "setIndex", jsonRead(configSetup, "setIndex"));
-  configOptions = jsonWrite(configOptions, "SSDP", jsonRead(configSetup, "SSDP"));
-  String configs = jsonRead(configSetup, "configs");
-  configs.toLowerCase();
- 
-   // ----------- запускаем необходимые всегда модули
-     // ----------- Выполняем запуск кофигурации
-  configSetup = jsonWrite(configSetup, "mac", WiFi.macAddress().c_str());
-  configSetup = jsonWrite(configSetup, "ip", WiFi.localIP().toString());
-*/
-  
+  //  configSetup = readFile("config.save.json", 4096);
+  /*  configSetup = jsonWrite(configSetup, "time", "00:00:00");
+    configJson = jsonWrite(configJson, "setIndex", jsonRead(configSetup, "setIndex"));
+    configOptions = jsonWrite(configOptions, "setIndex", jsonRead(configSetup, "setIndex"));
+    configOptions = jsonWrite(configOptions, "SSDP", jsonRead(configSetup, "SSDP"));
+    String configs = jsonRead(configSetup, "configs");
+    configs.toLowerCase();
+
+     // ----------- запускаем необходимые всегда модули
+       // ----------- Выполняем запуск кофигурации
+    configSetup = jsonWrite(configSetup, "mac", WiFi.macAddress().c_str());
+    configSetup = jsonWrite(configSetup, "ip", WiFi.localIP().toString());
+  */
+
   Serial.println("Step 2 FileConfig");
   loadConfig();
   Serial.println("Step 3 WIFI");
@@ -136,8 +139,8 @@ void setup() {
 }
 
 void loop() {
-  
-  handleMQTT();          
+
+  handleMQTT();
   HTTP.handleClient();
   delay(1);
 }

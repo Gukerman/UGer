@@ -17,6 +17,7 @@ function load(){
   }
  }
 }
+	
 
 function loadBlock(data2) {
  data2 = JSON.parse(xmlHttp.responseText);
@@ -30,10 +31,8 @@ for (var key in data2) {
  handleServerResponse();
 }
 
-function val(id){
- var v = document.getElementById(id).value;
- return v;
-}
+
+
 function send_request(submit,server){
  request = new XMLHttpRequest();
  request.open("GET", server, true);
@@ -53,6 +52,7 @@ function save_status(submit,request){
  submit.value = 'Подождите...';
  submit_disabled(true);
 }
+
 function submit_disabled(request){
  var inputs = document.getElementsByTagName("input");
  for (var i = 0; i < inputs.length; i++) {

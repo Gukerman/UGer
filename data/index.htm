@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script type="text/javascript" src="/function.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Доп. настройки</title>
+  <title>Настройки</title>
   <script type="text/javascript">
    var set_real_time;
    function handleServerResponse(){
@@ -56,7 +56,7 @@
    }
    
    function set_gerkon(submit){
-    server = "/gerkon?gerkonopen="+val('gerkonopen')+"&gerkonclose="+val('gerkonclose')+"&gerkonbat="+val('gerkonbat')+"&gerkonalarm="+val('gerkonalarm');
+    server = "/gerkon?gerkonopen="+val('gerkonopen')+"&gerkonclose="+val('gerkonclose')+"&gerkonbat="+val('gerkonbat')+"&gerkonalarm="+val('gerkonalarm')+"&gerkonend="+val('gerkonend');
     send_request(submit,server);
    }
    
@@ -75,12 +75,32 @@
      return false;
     }
    }
+
+	function loadWifi(ssids,hiddenIds){
+	 html(ssids, '<li><a href="#">Loading...</a></li>');
+	 ajax.get('/wifi.scan.json',{},function(response) {
+	  var jsonWifi=JSON.parse(response);
+	  jsonWifi.networks.sort(function(a,b){return (a.dbm < b.dbm) ? 1 : ((b.dbm < a.dbm) ? -1 : 0);});
+	  var html = '';
+	  for(var i = 0;i<jsonWifi.networks.length;i++) {
+	   var wifiSignal = '';
+	   if (jsonWifi.networks[i].dbm <= -0) { wifiSignal = '0-60';}
+	   if (jsonWifi.networks[i].dbm <= -60) { wifiSignal = '60-70';}
+	   if (jsonWifi.networks[i].dbm <= -70) { wifiSignal = '70-80';}
+	   if (jsonWifi.networks[i].dbm <= -80) { wifiSignal = '80-90';}
+	   if (jsonWifi.networks[i].dbm <= -90) { wifiSignal = '90-100';}
+	   html += '<li><a href="#" onclick="val(\''+hiddenIds+'\',\''+jsonWifi.networks[i].ssid+'\');toggle(\'ssid-select\');html(\'ssid-name\',\''+jsonWifi.networks[i].ssid+'\');return false"><div style="float:right">'+(jsonWifi.networks[i].pass?'<i class="wifi wifi-key"></i>':'')+' <i class="wifi wifi-'+wifiSignal+'"></i> <span class="label label-default">'+jsonWifi.networks[i].dbm+' dBm</span></div><b>'+jsonWifi.networks[i].ssid+'</b></a></li>';
+	  }
+	  document.getElementById(ssids).innerHTML = (html?html:'<li><a href="#">Not found WiFi</a></li>')+'<li><a href="#" onclick="toggle(\'ssid-group\');toggle(\'ssid\');return false"><b>'+jsonResponse.LangHiddenWifi+'</b></a></li>';
+	 },true);
+	}
+
   </script>
  </head>
  <body onload="load();">
   <div class="container">
    <div class="row" style="text-align:center;">
-    <h1 style="margin:50px;">Доп. настройки</h1>
+    <h1 style="margin:50px;">Настройки</h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <h5 class="alert-info" id="ssdp_t">{{SSDP}}</h5>
      <a class="btn btn-block btn-danger" href="/">Страница устройств</a>
@@ -124,6 +144,7 @@
 	     <br>Порт
 	     <br>Логин
 	     <br>Пароль		 
+	     <br>Последний удачный код		 
 	   </div>
       </div>
      </div>
@@ -131,20 +152,26 @@
       <hr>
 	 <h2>Настройки геркона</h2>
 	 <div class="row">
-     <div class="col-sm-6">
-     <input id="gerkonopen" value="{{gerkonopen}}" class="form-control" pattern="[0-9]{1,8}" placeholder="Открыт">
-     <input id="gerkonclose" value="{{gerkonclose}}" class="form-control" pattern="[0-9]{1,8}" placeholder="Закрыт">
-     <input id="gerkonbat" value="{{gerkonbat}}" class="form-control" pattern="[0-9]{1,8}" placeholder="Батарейка">
-     <input id="gerkonalarm" value="{{gerkonalarm}}" class="form-control" pattern="[0-9]{1,8}" placeholder="Авария">
-      </div>
-      <div class="col-sm-6">
-       <div class="alert alert-dismissible alert-warning">Здесь вы можете указать коды для геркона.
-	     <br>Открыт
-	     <br>Закрыт
-	     <br>Батарейка
-	     <br>Авария		 
-	   </div>
-      </div>
+     <div class="col-sm-5">
+     <input id="gerkonopen" value="{{gerkonopen}}" class="form-control2" pattern="[0-9]{1,8}" placeholder="Открыт">
+     <a href="#" class="btn btn-default" onclick="load();return false;"><i class="find-replace-img"></i></a>	
+     <input id="gerkonclose" value="{{gerkonclose}}" class="form-control2" pattern="[0-9]{1,8}" placeholder="Закрыт">
+     <a href="#" class="btn btn-default" onclick="load();return false;"><i class="find-replace-img"></i></a>	
+     <input id="gerkonbat" value="{{gerkonbat}}" class="form-control2" pattern="[0-9]{1,8}" placeholder="Батарейка">
+	 <a href="#" class="btn btn-default" onclick="load();return false;"><i class="find-replace-img"></i></a>	
+     <input id="gerkonalarm" value="{{gerkonalarm}}" class="form-control2" pattern="[0-9]{1,8}" placeholder="Авария">
+     <a href="#" class="btn btn-default" onclick="load();return false;"><i class="find-replace-img"></i></a>	
+     <input id="gerkonend" value="{{gerkonend}}" class="form-control2" pattern="[0-9]{1,8}" placeholder="Последняя команда">
+     <a href="#" class="btn btn-default" onclick="load();return false;"><i class="find-replace-img"></i></a>	
+     </div>
+	 <div class="col-sm-6">
+		<div class="alert alert-dismissible alert-warning">
+	     <p>Открыт</p>
+	     <p>Закрыт</p>
+	     <p>Батарейка</p>
+	     <p>Авария	</p>	 
+		</div>
+	 </div>
      </div>
 	 <input class="btn btn-block btn-success" value="Сохранить" onclick="set_gerkon(this);" type="submit">
       <hr>
