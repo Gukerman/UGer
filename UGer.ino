@@ -2,6 +2,9 @@
 
 
 */
+#include <WiFiClient.h>
+#include <ESP8266mDNS.h> 
+
 #include <ESP8266WiFi.h>        //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step1-wifi
 #include <ESP8266WebServer.h>   //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step2-webserver
 #include <ESP8266SSDP.h>        //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step3-ssdp
@@ -79,6 +82,8 @@ int pin433 = 13;
 int pinrele = 5; 
 int pinled = 2; 
 
+int ReceivedValue = 0;    //Переменная хранит статус последнего полученного кода с 433М
+ 
 void setup() {
   pinMode (pinrele, OUTPUT);
   pinMode (pinled, OUTPUT);
@@ -131,7 +136,6 @@ void setup() {
 
   initMQTT();
   Serial.println("Step 8 MQTT");
-
 
 }
 

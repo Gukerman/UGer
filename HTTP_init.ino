@@ -1,4 +1,34 @@
 
+const char* www_username = "admin";
+const char* www_password = "admin";
+
+void api(){         
+    if(!HTTP.authenticate(www_username, www_password))
+      return HTTP.requestAuthentication();   
+String api = "ESP8266   \n\n";
+api += "WiFi RSSI \n";
+api += WiFi.RSSI();
+api += "\n";
+api += "Ram \n";
+api += ESP.getFreeHeap();
+api += "\n";
+api += "Chip ID\n ";
+api += ESP.getChipId();
+api += "\n";
+api += "FlashChip ID\n ";
+api += ESP.getFlashChipId();
+api += "\n";
+api += "\n";
+api += "433 MHz \n";
+api += ReceivedValue;
+
+HTTP.send(200, "text/plain", api);
+if (!handleFileRead("/scan.html")) HTTP.send(404, "text/plain", "ServerNotFound");
+
+ };
+
+
+ 
 void HTTP_init(void) {
 
   HTTP.on("/configs.json", handle_ConfigJSON); // формирование configs.json страницы для передачи данных в web интерфейс
@@ -9,6 +39,8 @@ void HTTP_init(void) {
   HTTP.on("/gerkon", handle_Set_gerkon); // Установить код геркона по запросу вида  http://192.168.0.101/gerkon?gerkon=2866731
   HTTP.on("/restart", handle_Restart);   // Перезагрузка модуля по запросу вида /restart?device=ok
   HTTP.on("/mqtt", handle_Set_MQTT);
+  HTTP.on("/scan.html", api);
+
   // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
   httpUpdater.setup(&HTTP);
   // Запускаем HTTP сервер

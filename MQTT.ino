@@ -88,7 +88,8 @@ void  handleMQTT() {
     {
              pubTopic = "/smart_house/" + mqttUser + "/" + SSDP_Name + "/";
 
-      int ReceivedValue = mySwitch.getReceivedValue();     
+      ReceivedValue = mySwitch.getReceivedValue();     
+      
       if  (ReceivedValue == gerkonopen.toInt())    publishMQTT(pubTopic, "open");
       if  (ReceivedValue == gerkonclose.toInt())   publishMQTT(pubTopic, "close");
       if  (ReceivedValue == gerkonbat.toInt())     publishMQTT(pubTopic, "bat");

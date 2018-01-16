@@ -46,6 +46,11 @@ bool loadConfig() {
 
 // Запись данных в файл config.json
 bool saveConfigSetup() {
+    
+    Serial.print("saveConfigSetup FreeHeap - " );
+    Serial.print(ESP.getFreeHeap() );
+
+    
   // Резервируем память для json обекта буфер может рости по мере необходимти предпочтительно для ESP8266 
   DynamicJsonBuffer jsonBuffer;
   //  вызовите парсер JSON через экземпляр jsonBuffer
@@ -66,6 +71,7 @@ bool saveConfigSetup() {
   json["mqttUser"] = mqttUser;     
   json["mqttPass"] = mqttPass;     
    
+  jsonConfig = "";
 
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);
@@ -79,6 +85,10 @@ bool saveConfigSetup() {
   // Записываем строку json в файл 
   json.printTo(configFile);
   configFile.close();
+
+    Serial.print("               FreeHeap - " );
+    Serial.println(ESP.getFreeHeap() );
+    
   return true;
   }
 
