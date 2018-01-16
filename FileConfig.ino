@@ -41,7 +41,6 @@ bool loadConfig() {
     gerkonclose = root["gerkonclose"].as<String>();
     gerkonbat = root["gerkonbat"].as<String>();
     gerkonalarm = root["gerkonalarm"].as<String>();  
-    gerkonend = root["gerkonend"].as<String>();  
     return true;
 }
 
@@ -62,7 +61,6 @@ bool saveConfigSetup() {
   json["gerkonclose"] = gerkonclose;
   json["gerkonbat"] = gerkonbat;
   json["gerkonalarm"] = gerkonalarm;
-  json["gerkonend"] = gerkonend;
   json["mqttServer"] = mqttServer;     
   json["mqttPort"] = mqttPort;     
   json["mqttUser"] = mqttUser;     

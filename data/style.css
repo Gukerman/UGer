@@ -71,10 +71,6 @@ h5 {
  text-transform:capitalize;
 }
 
-.find-replace-img {
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAuklEQ…iLNsE03j7GfYg+sInLRUjyNkkXtyG5GSLJ8Y6jIZJB5R98ATFFLZPmfkCHAAAAAElFTkSuQmCC);
-}
-
 /* loader */
 .loader {
  border:15px solid #fff;

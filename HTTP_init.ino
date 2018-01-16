@@ -86,7 +86,6 @@ void handle_ConfigJSON() {
   json["gerkonclose"] = gerkonclose;
   json["gerkonbat"] = gerkonbat;
   json["gerkonalarm"] = gerkonalarm;
-  json["gerkonend"] = gerkonend;
   json["mqttServer"] = mqttServer;     
   json["mqttPort"] = mqttPort;     
   json["mqttUser"] = mqttUser;     
