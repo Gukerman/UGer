@@ -18,6 +18,8 @@
 
 #include <RCSwitch.h>
 
+#include "PageScan.h"
+
 RCSwitch mySwitch = RCSwitch();
 
 // MQTT

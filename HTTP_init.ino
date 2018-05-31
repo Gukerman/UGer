@@ -1,34 +1,4 @@
 
-const char* www_username = "admin";
-const char* www_password = "admin";
-
-void api(){         
-    if(!HTTP.authenticate(www_username, www_password))
-      return HTTP.requestAuthentication();   
-String api = "ESP8266   \n\n";
-api += "WiFi RSSI \n";
-api += WiFi.RSSI();
-api += "\n";
-api += "Ram \n";
-api += ESP.getFreeHeap();
-api += "\n";
-api += "Chip ID\n ";
-api += ESP.getChipId();
-api += "\n";
-api += "FlashChip ID\n ";
-api += ESP.getFlashChipId();
-api += "\n";
-api += "\n";
-api += "433 MHz \n";
-api += ReceivedValue;
-
-HTTP.send(200, "text/plain", api);
-if (!handleFileRead("/scan.html")) HTTP.send(404, "text/plain", "ServerNotFound");
-
- };
-
-
- 
 void HTTP_init(void) {
 
   HTTP.on("/configs.json", handle_ConfigJSON); // формирование configs.json страницы для передачи данных в web интерфейс
